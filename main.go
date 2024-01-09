@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/json"
+	"gir/all-things-glucose/girlib"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,43 +10,51 @@ import (
 type Milk struct {
 	ID    string  `json:"id"`
 	Name  string  `json:"name"`
-	Grams float64 `json:"grams"`
+	Grams float32 `json:"grams"`
 }
 
 type GIRRequest struct {
-	Weight     *float64 `json:"weight"`
-	Rate       *float64 `json:"rate"`
-	Percentage *float64 `json:"percentage"`
+	Weight     float32 `json:"weight" binding:"required"`
+	Rate       float32 `json:"rate" binding:"required"`
+	Percentage float32 `json:"percentage" binding:"required"`
+}
+
+type MilkGIRRequest struct {
+	Weight float32 `json:"weight" binding:"required"`
+	Volume float32 `json:"volume" binding:"required"`
+	ID     string  `json:"id" binding:"required"`
 }
 
 type GIRResponse struct {
 	Error  string  `json:"error"`
-	Result float64 `json:"result"`
+	Result float32 `json:"result"`
 }
 
 func main() {
 	router := gin.Default()
 	router.GET("/milks", getMilks)
-	router.GET("/albums/:id", getMilkByID)
-	router.POST("/albums", postMilks)
+	router.GET("/milks/:id", getMilkByID)
+	router.POST("/dextrose-infusion-rate", dextroseInfusionRate)
+	router.POST("/milk-glucose-infusion-rate", milkGlucoseInfusionRate)
+	router.POST("/milks", postMilks)
 
 	router.Run("localhost:8080")
 }
 
 var milks = []Milk{
-	{ID: "1", Name: "Aptamil 1 First Name", Grams: 7.0},
-	{ID: "2", Name: "Aptamil Profutura 1 First Infant Name", Grams: 7.0},
-	{ID: "3", Name: "Breast Name (mature)", Grams: 7.2},
-	{ID: "4", Name: "Cow & Gate 1 First Infant Name", Grams: 7.4},
-	{ID: "5", Name: "Hipp Organic Combiotic First Infant Name", Grams: 7.3},
+	{ID: "1", Name: "Aptamil 1 First Milk", Grams: 7.0},
+	{ID: "2", Name: "Aptamil Profutura 1 First Infant Milk", Grams: 7.0},
+	{ID: "3", Name: "Breast Milk (mature)", Grams: 7.2},
+	{ID: "4", Name: "Cow & Gate 1 First Infant Milk", Grams: 7.4},
+	{ID: "5", Name: "Hipp Organic Combiotic First Infant Milk", Grams: 7.3},
 	{ID: "6", Name: "Holle Organic Infant Formula 1", Grams: 7.4},
-	{ID: "7", Name: "SMA Pro First Infant Name", Grams: 7.1},
-	{ID: "8", Name: "Holle Organic Infant Goat Name Formula 1", Grams: 7.5},
+	{ID: "7", Name: "SMA Pro First Infant Milk", Grams: 7.1},
+	{ID: "8", Name: "Holle Organic Infant Goat Milk Formula 1", Grams: 7.5},
 	{ID: "9", Name: "Kabrita Gold 1", Grams: 7.3},
-	{ID: "10", Name: "NANNYcare First Infant Name", Grams: 7.4},
-	{ID: "11", Name: "Aptamil Hungry Name", Grams: 7.8},
-	{ID: "12", Name: "Cow & Gate Infant Name for Hungrier Babies", Grams: 7.8},
-	{ID: "13", Name: "Hipp Organic Combiotic Hungry Infant Name", Grams: 7.3},
+	{ID: "10", Name: "NANNYcare First Infant Milk", Grams: 7.4},
+	{ID: "11", Name: "Aptamil Hungry Milk", Grams: 7.8},
+	{ID: "12", Name: "Cow & Gate Infant Milk for Hungrier Babies", Grams: 7.8},
+	{ID: "13", Name: "Hipp Organic Combiotic Hungry Infant Milk", Grams: 7.3},
 	{ID: "14", Name: "SMA Extra Hungry", Grams: 7.0},
 	{ID: "15", Name: "Aptamil Anti-reflux", Grams: 6.8},
 	{ID: "16", Name: "Cow & Gate Anti-reflux", Grams: 6.8},
@@ -58,30 +66,30 @@ var milks = []Milk{
 	{ID: "22", Name: "Cow & Gate Comfort", Grams: 7.2},
 	{ID: "23", Name: "SMA Comfort", Grams: 7.1},
 	{ID: "24", Name: "SMA HA", Grams: 7.8},
-	{ID: "25", Name: "Aptamil 2 Follow-on Name", Grams: 8.6},
-	{ID: "26", Name: "Aptamil Profutura 2 Follow-on Name", Grams: 8.8},
-	{ID: "27", Name: "Cow & Gate 2 Follow-on Name", Grams: 8.6},
-	{ID: "28", Name: "Hipp Organic Combiotic Follow-on Name", Grams: 7.9},
+	{ID: "25", Name: "Aptamil 2 Follow-on Milk", Grams: 8.6},
+	{ID: "26", Name: "Aptamil Profutura 2 Follow-on Milk", Grams: 8.8},
+	{ID: "27", Name: "Cow & Gate 2 Follow-on Milk", Grams: 8.6},
+	{ID: "28", Name: "Hipp Organic Combiotic Follow-on Milk", Grams: 7.9},
 	{ID: "29", Name: "Holle Organic Infant Follow-on Formula", Grams: 8.2},
-	{ID: "30", Name: "SMA Pro Follow-on Name", Grams: 7.9},
-	{ID: "31", Name: "Holle Organic Infant Goat Name Follow-on Formula 2", Grams: 8.0},
+	{ID: "30", Name: "SMA Pro Follow-on Milk", Grams: 7.9},
+	{ID: "31", Name: "Holle Organic Infant Goat Milk Follow-on Formula 2", Grams: 8.0},
 	{ID: "32", Name: "Kabrita Gold 2", Grams: 8.0},
-	{ID: "33", Name: "NANNYcare Follow-on Name", Grams: 7.4},
-	{ID: "34", Name: "Hipp Organic Good Night Name", Grams: 8.0},
-	{ID: "35", Name: "Full-fate cows Name", Grams: 4.6},
-	{ID: "36", Name: "Semi-skimmed cows Name", Grams: 4.7},
-	{ID: "37", Name: "Aptamil 3 Growing Up Name 1-2 Years", Grams: 8.5},
-	{ID: "38", Name: "Aptamil Profutura 3 Growing Up Name", Grams: 8.4},
+	{ID: "33", Name: "NANNYcare Follow-on Milk", Grams: 7.4},
+	{ID: "34", Name: "Hipp Organic Good Night Milk", Grams: 8.0},
+	{ID: "35", Name: "Full-fat cows milk", Grams: 4.6},
+	{ID: "36", Name: "Semi-skimmed cows Milk", Grams: 4.7},
+	{ID: "37", Name: "Aptamil 3 Growing Up Milk 1-2 Years", Grams: 8.5},
+	{ID: "38", Name: "Aptamil Profutura 3 Growing Up Milk", Grams: 8.4},
 	{ID: "39", Name: "Cow & Gate 3 Growing Up Name 1-2 Years", Grams: 8.5},
-	{ID: "40", Name: "Hipp Organic Combiotic Growing-up Name", Grams: 8.2},
-	{ID: "41", Name: "Holle Organic Growing-up Name 3", Grams: 8.2},
+	{ID: "40", Name: "Hipp Organic Combiotic Growing-up Milk", Grams: 8.2},
+	{ID: "41", Name: "Holle Organic Growing-up Milk 3", Grams: 8.2},
 	{ID: "42", Name: "PaediaSure Shake", Grams: 13.2},
-	{ID: "43", Name: "SMA Pro Toddler Name 3", Grams: 7.0},
+	{ID: "43", Name: "SMA Pro Toddler Milk 3", Grams: 7.0},
 	{ID: "44", Name: "Kabrita Gold 3", Grams: 7.9},
-	{ID: "45", Name: "NANNYcare Growing Up Name", Grams: 6.7},
+	{ID: "45", Name: "NANNYcare Growing Up Milk", Grams: 6.7},
 	{ID: "46", Name: "Alpro Soya +1 Complete Care", Grams: 8.3},
-	{ID: "47", Name: "Aptamil 4 Growing Up Name 2-3 Years", Grams: 6.5},
-	{ID: "48", Name: "Cow & Gate 4 Growing Up Name 2-3 Years", Grams: 6.5},
+	{ID: "47", Name: "Aptamil 4 Growing Up Milk 2-3 Years", Grams: 6.5},
+	{ID: "48", Name: "Cow & Gate 4 Growing Up Milk 2-3 Years", Grams: 6.5},
 	{ID: "49", Name: "Aptamil Pepti 1", Grams: 7.1}, //these are special milks
 	{ID: "50", Name: "Cow & Gate Pepti-junior", Grams: 6.8},
 	{ID: "51", Name: "Mead Johnson Nutramigen LIPIL 1", Grams: 7.5},
@@ -161,29 +169,46 @@ func getMilkByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "milk not found"})
 }
 
-func glucoseInfusionRate(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-
-	// decode request
-	decoder := json.NewDecoder(r.Body)
-	request := &GIRRequest{}
-
-	if err := decoder.Decode(request); err != nil {
-		http.Error(w, err.Error(), http.StatusAccepted)
+func dextroseInfusionRate(c *gin.Context) {
+	// POST request that accepts params:
+	// rate in ml/hr
+	// weight in kg
+	// percentage of CHO in fluid as g/100ml
+	// Return value in mg/kg/min
+	var request GIRRequest
+	if err := c.ShouldBind(&request); err != nil {
+		c.String(http.StatusBadRequest, "bad request: %v", err)
 		return
 	}
 
-	response := &GIRResponse{}
+	rate := request.Rate
+	weight := request.Weight
+	percentage := request.Percentage
 
-	if request.Percentage == nil || request.Rate == nil || request.Percentage == nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
+	// this is the formula for glucose infusion rate
+	gir := girlib.GlucoseInfusionRate(rate, percentage, weight)
+
+	c.IndentedJSON(200, gin.H{"result": gir})
+}
+
+func milkGlucoseInfusionRate(c *gin.Context) {
+	// POST request that accepts params:
+	// milk volume/kg/d
+	// weight in kg
+	// milk id
+	// total
+	// Return value in mg/kg/min
+	var request MilkGIRRequest
+	milkID := request.ID
+	rate := request.Volume / 24
+	weight := request.Weight
+
+	for _, a := range milks {
+		if a.ID == milkID {
+			milkCarbs := float32(a.Grams)
+			gir := girlib.GlucoseInfusionRate(rate, milkCarbs, weight)
+			c.IndentedJSON(http.StatusOK, gin.H{"result": gir})
+		}
 	}
-
-	response.Result = (*request.Percentage * 10 * *request.Percentage) / (*request.Weight * 60)
-
-	w.Header().Set("Content-Type", "application/json")
-	if response.Error != "" {
-		w.WriteHeader(http.StatusBadRequest)
-	}
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "milk not found"})
 }
