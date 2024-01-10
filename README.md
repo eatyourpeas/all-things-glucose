@@ -4,7 +4,7 @@ Written in Golang, this API is a service to bring all glucose calculations in to
 
 This intial simple API is a Glucose Infusion Rate calculator. Helpful for calculating glucose requirement, especially where hyperinsulinism is suspected.
 
-This includes a list of specialist and standard infant milks with glucose contents per 100g to all the user more accurately to calculate a GIR, when glucose comes through the drip, the PN and the milk all at the same time.
+This includes a list of specialist and standard infant milks with glucose contents per 100g to help the user more accurately to calculate a GIR, especially when glucose comes not only through the drip, but also in the PN and the milk all at the same time.
 
 ## Getting started
 
