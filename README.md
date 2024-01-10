@@ -14,11 +14,13 @@ This includes a list of specialist and standard infant milks with glucose conten
 
 ### Example
 
+A 2.5kg baby on iv 10% dextrose running at 15.6ml/h (~150ml/kg/d)
+
 ***request***:
 
 ```curl
 curl -H 'Content-Type: application/json' \
-      -d '{ "weight":2.5,"rate":5, "percentage": 10}' \
+      -d '{ "weight":2.5,"rate":15.6, "percentage": 10}' \
       -X POST \
       http://localhost:8080/dextrose-infusion-rate
 ```
@@ -27,11 +29,13 @@ curl -H 'Content-Type: application/json' \
 
 ```console
 {
-    "data": 3.3333333
+    "result": 10.400001
 }
 ```
 
 and
+
+A 3kg infant on 180 ml/kg/d Cow&Gate First infant milk (7.4g/100ml)
 
 ***request***
 
