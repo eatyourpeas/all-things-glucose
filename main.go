@@ -199,15 +199,22 @@ func milkGlucoseInfusionRate(c *gin.Context) {
 	// total
 	// Return value in mg/kg/min
 	var request MilkGIRRequest
-	milkID := request.ID
+
+	if err := c.ShouldBind(&request); err != nil {
+		c.String(http.StatusBadRequest, "bad request: %v", err)
+		return
+	}
+
+	ID := request.ID
 	rate := request.Volume / 24
 	weight := request.Weight
 
 	for _, a := range milks {
-		if a.ID == milkID {
-			milkCarbs := float32(a.Grams)
-			gir := girlib.GlucoseInfusionRate(rate, milkCarbs, weight)
+		if a.ID == ID {
+			percentage := float32(a.Grams)
+			gir := girlib.GlucoseInfusionRate(rate, percentage, weight)
 			c.IndentedJSON(http.StatusOK, gin.H{"result": gir})
+			return
 		}
 	}
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "milk not found"})
