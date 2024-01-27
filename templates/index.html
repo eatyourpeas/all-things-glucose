@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ .title }}</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = {
+		  theme: {
+			extend: {
+				colors: {
+					eatyourpeasGreen: '#8eab12',
+				},
+			},
+			container: {
+				center: true,
+		  	},
+		  }
+		}
+	  </script>
+</head>
+<body>
+	<div class="container mx-auto">
+		<h1 class="text-3xl font-bold text-eatyourpeasGreen">
+			{{ .title }}
+		</h1>
+		<p>Calculate a glucose infusion rate from multiple sources like TPN, milk and iv dextrose</p>
+		<div class="grid grid-flow-row-dense grid-cols-3 grid-rows-3 ">
+
+			<div class="col-span-3">
+				<select class="data-te-select-init">
+					{{ range .milks }}
+						<option value={{.ID}}>{{ .Name}} </option>
+					{{ end }}
+				</select>
+				<label data-te-select-label-ref>Select milk</label>
+			</div>
+
+			<div class="col-span-3">
+				<select class="data-te-select-init">
+					<option value="100">100 ml/kg/d</option>
+					<option value="120">120 ml/kg/d</option>
+					<option value="130">130 ml/kg/d</option>
+					<option value="150">150 ml/kg/d</option>
+					<option value="160">160 ml/kg/d</option>
+					<option value="170">170 ml/kg/d</option>
+					<option value="180">180 ml/kg/d</option>
+					<option value="200">200 ml/kg/d</option>
+					<option value="210">210 ml/kg/d</option>
+				</select>
+				<label data-te-select-label-ref>Select daily volume (ml/kg/d)</label>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>

@@ -31,14 +31,23 @@ type GIRResponse struct {
 }
 
 func main() {
+
+	// API
 	router := gin.Default()
+	router.LoadHTMLGlob("templates/*")
 	router.GET("/milks", getMilks)
 	router.GET("/milks/:id", getMilkByID)
 	router.POST("/dextrose-infusion-rate", dextroseInfusionRate)
 	router.POST("/milk-glucose-infusion-rate", milkGlucoseInfusionRate)
 	router.POST("/milks", postMilks)
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "index.html", gin.H{
+			"title": "all-things-glucose",
+			"milks": milks,
+		})
+	})
 
-	router.Run("localhost:8080")
+	router.Run(":8080")
 }
 
 var milks = []Milk{
