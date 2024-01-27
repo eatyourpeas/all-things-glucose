@@ -1,0 +1,33 @@
+{{define "milk-component"}}
+	<div class="p-8 max-w-lg mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-8 mt-6">
+
+		<div class="grid grid-cols-2 gap-4 content-start font-mono">
+			<label class="data-te-select-label-ref">Select milk:</label>
+			<div>
+				<select class="data-te-select-init">
+					{{ range .milks }}
+						<option value={{.ID}}>{{ .Name}} </option>
+					{{ end }}
+				</select>
+			</div>
+		
+			<label class="data-te-select-label-ref">Select daily volume (ml/kg/d):</label>
+			<div>
+				<select class="data-te-select-init">
+					<option value="100">100 ml/kg/d</option>
+					<option value="120">120 ml/kg/d</option>
+					<option value="130">130 ml/kg/d</option>
+					<option value="150">150 ml/kg/d</option>
+					<option value="160">160 ml/kg/d</option>
+					<option value="170">170 ml/kg/d</option>
+					<option value="180">180 ml/kg/d</option>
+					<option value="200">200 ml/kg/d</option>
+					<option value="210">210 ml/kg/d</option>
+				</select>
+			</div>
+
+			{{ template "total" }}
+			
+	</div>
+{{end}}
+	

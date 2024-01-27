@@ -1,0 +1,14 @@
+{{ template "base" }}
+
+{{ define "content" }}
+    <h1 class="text-center mt-5 font-mono">Glucose infusion rate calculator</h1>
+
+    <p class="mt-2 text-slate-500 text-center font-mono p-8">Calculating the total glucose infusion rate usually means you have to think about the milk, the PN and the fluids.
+            Select each to calculate a total.</p>
+  
+
+<p class="text-center mt-5 font-mono">
+    
+</p>
+{{ template "milk-component" . }}
+{{ end }}
