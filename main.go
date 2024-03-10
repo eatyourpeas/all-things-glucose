@@ -41,7 +41,7 @@ func main() {
 	router.POST("/milk-glucose-infusion-rate", milkGlucoseInfusionRate)
 	router.POST("/milks", postMilks)
 	router.GET("/", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "calculator.html", gin.H{
+		ctx.HTML(http.StatusOK, "page.html", gin.H{
 			"title": "all-things-glucose",
 			"milks": milks,
 		})

@@ -1,12 +1,10 @@
-{{ define "nav" }}
+{{ template "base" }}
+{{ define "page" }}
     <sl-tab-group>
         <sl-tab slot="nav" panel="all-things-glucose">all-things-glucose</sl-tab>
         <sl-tab slot="nav" panel="docs">docs</sl-tab>
         <sl-tab-panel name="all-things-glucose">
-            <h1>
-                This is the all-things-glucose tab panel.
-            </h1>
-            {{ template "milk-component" . }}
+            {{ template "content" . }}
         </sl-tab-panel>
         <sl-tab-panel name="docs">This is the docs tab panel.</sl-tab-panel>
     </sl-tab-group>

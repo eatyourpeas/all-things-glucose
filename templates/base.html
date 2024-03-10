@@ -10,8 +10,29 @@
         <title>{{.title}}</title>
     </head>
     <body>
-        {{ template "nav" }}
-        {{ template "footer" }}
+        <container>
+            {{ template "page" }}
+        </container>
+        <container>
+            {{ template "footer" }}
+        </container>
     </body>
 </html>
+<style>
+    :host,
+    h1, h2, h3, h4, h5, h6, p {
+        font-family:'Courier New', Courier, monospace;
+        color: var(--sl-color-green-900);
+    }
+    sl-tab-group{
+        --indicator-color: var(--sl-color-green-900);
+        --track-width: 5px;
+    }
+    sl-tab[active]::part(base) {
+       cursor: default;
+    }
+    sl-tab[tabs]{
+        color: var(--sl-color-green-900);
+    }
+</style>
 {{end}}
