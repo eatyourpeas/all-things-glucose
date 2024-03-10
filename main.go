@@ -3,6 +3,7 @@ package main
 import (
 	"gir/all-things-glucose/girlib"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,12 +41,18 @@ func main() {
 	router.POST("/milk-glucose-infusion-rate", milkGlucoseInfusionRate)
 	router.POST("/milks", postMilks)
 	router.GET("/", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "calculator", gin.H{
+		ctx.HTML(http.StatusOK, "calculator.html", gin.H{
 			"title": "all-things-glucose",
 			"milks": milks,
 		})
 	})
-	
+	router.POST("/child-milk", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "total", gin.H{
+			"Total": 15,
+			"milks": milks,
+		})
+	})
+
 	router.Run(":8080")
 }
 

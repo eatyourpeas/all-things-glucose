@@ -1,19 +1,20 @@
 {{define "milk-component"}}
-	<div class="p-8 max-w-lg mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-8 mt-6">
-
-		<div class="grid grid-cols-2 gap-4 content-start font-mono">
-			<label class="data-te-select-label-ref">Select milk:</label>
-			<div>
-				<select class="data-te-select-init">
+	<sl-card class="card-basic">
+		<form class="max-w-sm mx-auto">
+			<label for="number-input" class="block mb-2 text-sm font-medium text-gray-900">Enter weight (kg):</label>
+			<input type="number" id="number-input" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="2.650" required>
+		
+	
+			<label for="milks" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+			<select id="milks" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+			<option selected>Choose a milk</option>
 					{{ range .milks }}
 						<option value={{.ID}}>{{ .Name}} </option>
 					{{ end }}
-				</select>
-			</div>
-		
-			<label class="data-te-select-label-ref">Select daily volume (ml/kg/d):</label>
-			<div>
-				<select class="data-te-select-init">
+			</select>
+	
+			<label for="volumes" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select daily volume</label>
+			<select id="volumes" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 					<option value="100">100 ml/kg/d</option>
 					<option value="120">120 ml/kg/d</option>
 					<option value="130">130 ml/kg/d</option>
@@ -23,11 +24,16 @@
 					<option value="180">180 ml/kg/d</option>
 					<option value="200">200 ml/kg/d</option>
 					<option value="210">210 ml/kg/d</option>
-				</select>
-			</div>
-
+			</select>
 			{{ template "total" }}
-			
-	</div>
+			<sl-button 
+				hx-post="/child-milk"
+				hx-target="#milk-total"
+				hx-swap="innerHTML"
+			>Submit</sl-button>
+		</form>
+
+	</sl-card>
+
 {{end}}
 	

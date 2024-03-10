@@ -4,28 +4,13 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        eatyourpeasGreen: '#8eab12',
-                    },
-                },
-                container: {
-                    center: true,
-                },
-            }
-            }
-        </script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.14.0/cdn/themes/light.css" />
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.14.0/cdn/shoelace-autoloader.js"></script>
+
         <title>{{.title}}</title>
     </head>
     <body>
         {{ template "nav" }}
-        <main class="h-56 grid grid-cols-1 gap-4 content-start">
-            {{ block "content" .}}{{ end }}
-        </main>
         {{ template "footer" }}
     </body>
 </html>
