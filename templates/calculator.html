@@ -7,11 +7,13 @@
         
                 <p>Calculating the total glucose infusion rate usually means you have to think about the milk, the PN and the fluids.
                         Select each to calculate a total.</p>
+                
+                {{ template "milk-component" . }}
         </sl-card>
         
         <style>
                 .card-header {
-                        background-color: var(--sl-color-green-100);
+                  background-color: var(--sl-color-green-100);
                   max-width: 600px;
                   flex-flow: row;
                 }

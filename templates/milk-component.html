@@ -1,31 +1,29 @@
 {{define "milk-component"}}
 	<sl-card class="card-basic">
-		<form class="max-w-sm mx-auto">
-			<label for="number-input" class="block mb-2 text-sm font-medium text-gray-900">Enter weight (kg):</label>
-			<input type="number" id="number-input" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="2.650" required>
+
+		<form>
+			<sl-input type="number" id="number-input" placeholder="2.650" required label="Enter weight (kg):"></sl-input>
 		
+			<sl-select id="milks" help-text="Select a milk">
+				{{ range .milks }}
+					<sl-option value={{.ID}}>{{ .Name}} </sl-option>
+				{{ end }}
+			</sl-select>
 	
-			<label for="milks" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
-			<select id="milks" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-			<option selected>Choose a milk</option>
-					{{ range .milks }}
-						<option value={{.ID}}>{{ .Name}} </option>
-					{{ end }}
-			</select>
-	
-			<label for="volumes" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select daily volume</label>
-			<select id="volumes" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-					<option value="100">100 ml/kg/d</option>
-					<option value="120">120 ml/kg/d</option>
-					<option value="130">130 ml/kg/d</option>
-					<option value="150">150 ml/kg/d</option>
-					<option value="160">160 ml/kg/d</option>
-					<option value="170">170 ml/kg/d</option>
-					<option value="180">180 ml/kg/d</option>
-					<option value="200">200 ml/kg/d</option>
-					<option value="210">210 ml/kg/d</option>
-			</select>
+			<sl-select id="volumes" label="Select daily volume">
+					<sl-option value="100">100 ml/kg/d</sl-option>
+					<sl-option value="120">120 ml/kg/d</sl-option>
+					<sl-option value="130">130 ml/kg/d</sl-option>
+					<sl-option value="150">150 ml/kg/d</sl-option>
+					<sl-option value="160">160 ml/kg/d</sl-option>
+					<sl-option value="170">170 ml/kg/d</sl-option>
+					<sl-option value="180">180 ml/kg/d</sl-option>
+					<sl-option value="200">200 ml/kg/d</sl-option>
+					<sl-option value="210">210 ml/kg/d</sl-option>
+			</sl-select>
+
 			{{ template "total" }}
+
 			<sl-button 
 				hx-post="/child-milk"
 				hx-target="#milk-total"
